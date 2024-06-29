@@ -21,18 +21,17 @@ public enum Status {
         return descricao;
     }
 
-    public static Status toEnum(Integer cod){
-        if (cod == null){
+    public static Status toEnum(Integer cod) {
+        if (cod == null) {
             return null;
         }
 
-        for (Prioridade x : Prioridade.values()){
-            if (cod.equals(x.getCod())){
+        for (Status x : Status.values()) { // Correção está aqui
+            if (cod.equals(x.getCod())) {
                 return x;
             }
         }
 
-        throw new IllegalArgumentException("Status inválido!" + cod);
+        throw new IllegalArgumentException("Status inválido! " + cod);
     }
-
 }
