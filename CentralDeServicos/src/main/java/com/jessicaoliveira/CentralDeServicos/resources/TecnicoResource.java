@@ -3,6 +3,7 @@ package com.jessicaoliveira.CentralDeServicos.resources;
 import com.jessicaoliveira.CentralDeServicos.domain.Tecnico;
 import com.jessicaoliveira.CentralDeServicos.dtos.TecnicoDTO;
 import com.jessicaoliveira.CentralDeServicos.services.TecnicoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +34,19 @@ public class TecnicoResource {
     }
 
     @PostMapping
-    public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoDTO objDTO){
+    public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO objDTO){
         Tecnico newObj = service.create(objDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(newObj.getId())
                 .toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id, @Valid @RequestBody TecnicoDTO objDTO){
+        TecnicoDTO newObj = new TecnicoDTO(service.update(id, objDTO));
+        return ResponseEntity.ok().body(newObj);
+
     }
 }
