@@ -1,5 +1,6 @@
 package com.jessicaoliveira.CentralDeServicos.resources.exceptions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,17 +9,8 @@ public class ValidationError extends StandardError {
 
     private List<FieldMessage> errors = new ArrayList<>();
 
-    public ValidationError(){
-        super();
-    }
-
-    public ValidationError(List<FieldMessage> errors) {
-        this.errors = errors;
-    }
-
-    public ValidationError(Long timestamp, Integer status, String error, List<FieldMessage> errors) {
+    public ValidationError(Long timestamp, Integer status, String error) {
         super(timestamp, status, error);
-        this.errors = errors;
     }
 
     public List<FieldMessage> getErrors() {
