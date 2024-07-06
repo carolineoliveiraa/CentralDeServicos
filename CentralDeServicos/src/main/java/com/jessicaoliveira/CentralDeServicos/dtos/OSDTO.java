@@ -38,6 +38,7 @@ public class OSDTO implements Serializable {
         this.tecnico = obj.getTecnico().getId();
         this.cliente = obj.getCliente().getId();
     }
+    
 
     public LocalDateTime getDataAbertura() {
         return dataAbertura;
