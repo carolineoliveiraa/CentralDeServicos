@@ -1,12 +1,8 @@
 package com.jessicaoliveira.CentralDeServicos.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.jessicaoliveira.CentralDeServicos.domain.Cliente;
 import com.jessicaoliveira.CentralDeServicos.domain.OS;
-import com.jessicaoliveira.CentralDeServicos.domain.Tecnico;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,17 +11,26 @@ public class OSDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataAbertura;
+
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataFechamento;
+
+    @NotNull(message = "O campo PRIORIDADE é requerido")
     private Integer prioridade;
-    @NotEmpty(message = "O campo OBSERVAÇÕES é requerido")
+
+    @NotNull(message = "O campo OBSERVAÇÕES é requerido")
     private String observacoes;
-    @NotEmpty(message = "O campo STATUS é requerido")
+
+    @NotNull(message = "O campo STATUS é requerido")
     private Integer status;
-    @NotEmpty(message = "O campo TECNICO é requerido") 
+
+    @NotNull(message = "O campo TECNICO é requerido")
     private Integer tecnico;
+
+    @NotNull(message = "O campo CLIENTE é requerido")
     private Integer cliente;
 
     public OSDTO(){
@@ -35,7 +40,7 @@ public class OSDTO implements Serializable {
     public OSDTO(OS obj) {
         this.id = obj.getId();
         this.dataAbertura = obj.getDataAbertura();
-        this.dataFechamento =obj.getDataFechamento();
+        this.dataFechamento = obj.getDataFechamento();
         this.prioridade = obj.getPrioridade().getCod();
         this.observacoes = obj.getObservacoes();
         this.status = obj.getStatus().getCod();
@@ -43,6 +48,13 @@ public class OSDTO implements Serializable {
         this.cliente = obj.getCliente().getId();
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public LocalDateTime getDataAbertura() {
         return dataAbertura;
