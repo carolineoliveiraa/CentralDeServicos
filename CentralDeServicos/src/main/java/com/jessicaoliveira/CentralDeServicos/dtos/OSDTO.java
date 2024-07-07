@@ -6,6 +6,7 @@ import com.jessicaoliveira.CentralDeServicos.domain.OS;
 import com.jessicaoliveira.CentralDeServicos.domain.Tecnico;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,8 +20,11 @@ public class OSDTO implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataFechamento;
     private Integer prioridade;
+    @NotEmpty(message = "O campo OBSERVAÇÕES é requerido")
     private String observacoes;
+    @NotEmpty(message = "O campo STATUS é requerido")
     private Integer status;
+    @NotEmpty(message = "O campo TECNICO é requerido") 
     private Integer tecnico;
     private Integer cliente;
 
@@ -38,7 +42,7 @@ public class OSDTO implements Serializable {
         this.tecnico = obj.getTecnico().getId();
         this.cliente = obj.getCliente().getId();
     }
-    
+
 
     public LocalDateTime getDataAbertura() {
         return dataAbertura;

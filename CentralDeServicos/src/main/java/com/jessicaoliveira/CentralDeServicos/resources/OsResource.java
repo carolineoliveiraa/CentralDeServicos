@@ -2,6 +2,7 @@ package com.jessicaoliveira.CentralDeServicos.resources;
 
 import com.jessicaoliveira.CentralDeServicos.dtos.OSDTO;
 import com.jessicaoliveira.CentralDeServicos.services.OsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class OsResource {
     }
 
     @PostMapping
-    public ResponseEntity<OSDTO> create(@RequestBody OSDTO obj){
-
+    public ResponseEntity<OSDTO> create(@Valid @RequestBody OSDTO obj){
+        obj = new OSDTO(service.create(obj));
     }
 }
