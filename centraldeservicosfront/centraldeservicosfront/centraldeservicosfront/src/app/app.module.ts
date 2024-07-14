@@ -22,6 +22,19 @@ import { HeaderComponent } from './views/components/template/header/header.compo
 import { FooterComponent } from './views/components/template/footer/footer.component';
 import { NavComponent } from './views/components/template/nav/nav.component';
 import { HomeComponent } from './views/components/home/home.component';
+import { TecnicoReadComponent } from './views/components/tecnico/tecnico-read/tecnico-read.component';
+import { TecnicoCreateComponent } from './views/components/tecnico/tecnico-create/tecnico-create.component';
+import { TecnicoUpdateComponent } from './views/components/tecnico/tecnico-update/tecnico-update.component';
+import { TecnicoDeleteComponent } from './views/components/tecnico/tecnico-delete/tecnico-delete.component';
+import { ClienteReadComponent } from './views/components/cliente/cliente-read/cliente-read.component';
+import { ClienteCreateComponent } from './views/components/cliente/cliente-create/cliente-create.component';
+import { ClienteUpdateComponent } from './views/components/cliente/cliente-update/cliente-update.component';
+import { ClienteDeleteComponent } from './views/components/cliente/cliente-delete/cliente-delete.component';
+import { OsClosedComponent } from './views/components/os/os-closed/os-closed.component';
+import { OsCreateComponent } from './views/components/os/os-create/os-create.component';
+import { OsDescriptionComponent } from './views/components/os/os-description/os-description.component';
+import { OsReadComponent } from './views/components/os/os-read/os-read.component';
+import { OsUpdateComponent } from './views/components/os/os-update/os-update.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +42,20 @@ import { HomeComponent } from './views/components/home/home.component';
     HeaderComponent,
     FooterComponent,
     NavComponent,
-    HomeComponent
+    HomeComponent,
+    TecnicoReadComponent,
+    TecnicoCreateComponent,
+    TecnicoUpdateComponent,
+    TecnicoDeleteComponent,
+    ClienteReadComponent,
+    ClienteCreateComponent,
+    ClienteUpdateComponent,
+    ClienteDeleteComponent,
+    OsClosedComponent,
+    OsCreateComponent,
+    OsDescriptionComponent,
+    OsReadComponent,
+    OsUpdateComponent
   ],
   imports: [
     BrowserModule,
