@@ -1,7 +1,6 @@
 package com.jessicaoliveira.CentralDeServicos.dtos;
 
 import com.jessicaoliveira.CentralDeServicos.domain.Cliente;
-import com.jessicaoliveira.CentralDeServicos.domain.Tecnico;
 import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.br.CPF;
 

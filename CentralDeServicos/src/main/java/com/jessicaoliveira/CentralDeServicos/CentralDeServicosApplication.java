@@ -18,7 +18,6 @@ import java.util.Arrays;
 @SpringBootApplication
 public class CentralDeServicosApplication {
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(CentralDeServicosApplication.class, args);
 	}
