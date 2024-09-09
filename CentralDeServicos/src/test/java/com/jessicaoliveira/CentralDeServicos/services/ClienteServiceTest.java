@@ -1,9 +1,12 @@
 package com.jessicaoliveira.CentralDeServicos.services;
 
 import com.jessicaoliveira.CentralDeServicos.domain.Cliente;
+import com.jessicaoliveira.CentralDeServicos.domain.OS;
+import com.jessicaoliveira.CentralDeServicos.domain.Pessoa;
 import com.jessicaoliveira.CentralDeServicos.dtos.ClienteDTO;
 import com.jessicaoliveira.CentralDeServicos.repositories.ClienteRepository;
 import com.jessicaoliveira.CentralDeServicos.repositories.PessoaRepository;
+import com.jessicaoliveira.CentralDeServicos.services.exceptions.DataIntegratyViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,6 +23,11 @@ import static org.mockito.Mockito.*;
 
 class ClienteServiceTest {
 
+    public static final String CPF_JA_CADASTRADO_NA_BASE_DE_DADOS = "CPF já cadastrado na base de dados!";
+    public static final int ID = 1;
+    public static final String NOME = "Betina Campos";
+    public static final String CPF = "842.464.790-47";
+    public static final String TELEFONE = "(74)99154-1907";
     @InjectMocks
     private ClienteService clienteService;
 
@@ -37,11 +45,11 @@ class ClienteServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        cliente = new Cliente(1, "Betina Campos", "842.464.790-47", "(74)99154-1907");
+        cliente = new Cliente(ID, NOME, CPF, TELEFONE);
         clienteDTO = new ClienteDTO();
-        clienteDTO.setNome("Betina Campos");
-        clienteDTO.setCpf("842.464.790-47");
-        clienteDTO.setTelefone("(74)99154-1907");
+        clienteDTO.setNome(NOME);
+        clienteDTO.setCpf(CPF);
+        clienteDTO.setTelefone(TELEFONE);
     }
 
 
@@ -49,11 +57,11 @@ class ClienteServiceTest {
     void whenFindByIdThenReturnClientOfId() {
         when(clienteRepository.findById(anyInt())).thenReturn(Optional.of(cliente));
 
-        Cliente foundClient = clienteService.findById(1);
+        Cliente foundClient = clienteService.findById(ID);
 
         assertNotNull(foundClient);
         assertEquals(Cliente.class, foundClient.getClass());
-        assertEquals(1, foundClient.getId());
+        assertEquals(ID, foundClient.getId());
     }
 
     @Test
@@ -64,7 +72,7 @@ class ClienteServiceTest {
 
         assertNotNull(clientes);
         assertEquals(Cliente.class, clientes.get(0).getClass());
-        assertEquals(1, clientes.size());
+        assertEquals(ID, clientes.size());
     }
 
     @Test
@@ -76,23 +84,23 @@ class ClienteServiceTest {
 
         assertNotNull(createdCliente);
         assertEquals(Cliente.class, createdCliente.getClass());
-        assertEquals("Betina Campos", createdCliente.getNome());
+        assertEquals(NOME, createdCliente.getNome());
     }
 
     @Test
     void whenUpdateThenReturnAClient() {
         // Cliente existente no banco
-        Cliente existingCliente = new Cliente(1, "Atualizar Nome", "842.464.790-47", "(74)99154-1907");
+        Cliente existingCliente = new Cliente(ID, "Atualizar Nome", CPF, TELEFONE);
         when(clienteRepository.findById(anyInt())).thenReturn(Optional.of(existingCliente));
         when(pessoaRepository.findByCPF(anyString())).thenReturn(null);
         when(clienteRepository.save(any(Cliente.class))).thenReturn(existingCliente);
 
-        Cliente updatedCliente = clienteService.update(1, clienteDTO);
+        Cliente updatedCliente = clienteService.update(ID, clienteDTO);
 
         assertNotNull(updatedCliente);
-        assertEquals("Betina Campos", updatedCliente.getNome());
-        assertEquals("842.464.790-47", updatedCliente.getCpf());
-        assertEquals("(74)99154-1907", updatedCliente.getTelefone());
+        assertEquals(NOME, updatedCliente.getNome());
+        assertEquals(CPF, updatedCliente.getCpf());
+        assertEquals(TELEFONE, updatedCliente.getTelefone());
     }
 
 
@@ -100,8 +108,57 @@ class ClienteServiceTest {
     void whenDeleteThenReturnSuccess() {
         when(clienteRepository.findById(anyInt())).thenReturn(Optional.of(cliente));
 
-        clienteService.delete(1);
+        clienteService.delete(ID);
 
-        verify(clienteRepository, times(1)).deleteById(anyInt());
+        verify(clienteRepository, times(ID)).deleteById(anyInt());
+    }
+
+    // Testes Exceptions
+
+    @Test
+    void whenCreateThenThrowExceptionForExistingCPF() {
+        Cliente existingPessoa = new Cliente();
+        existingPessoa.setId(ID);
+        when(pessoaRepository.findByCPF(anyString())).thenReturn(existingPessoa);
+
+        DataIntegratyViolationException thrown = assertThrows(
+                DataIntegratyViolationException.class,
+                () -> clienteService.create(clienteDTO),
+                "Esperava-se que create() lançasse DataIntegratyViolationException, mas isso não aconteceu"
+        );
+
+        assertTrue(thrown.getMessage().contains(CPF_JA_CADASTRADO_NA_BASE_DE_DADOS));
+    }
+
+    @Test
+    void whenUpdateThenThrowExceptionForExistingCPF() {
+        Cliente existingPessoa = new Cliente();
+        existingPessoa.setId(2);
+        when(clienteRepository.findById(anyInt())).thenReturn(Optional.of(cliente));
+        when(pessoaRepository.findByCPF(anyString())).thenReturn(existingPessoa);
+
+        DataIntegratyViolationException exception = assertThrows(
+                DataIntegratyViolationException.class,
+                () -> clienteService.update(ID, clienteDTO),
+                "Esperava-se que update() lançasse DataIntegratyViolationException, mas isso não aconteceu"
+        );
+
+        assertTrue(exception.getMessage().contains(CPF_JA_CADASTRADO_NA_BASE_DE_DADOS));
+    }
+
+
+    @Test
+    void whenDeleteThenThrowExceptionForClientWithOrders(){
+        Cliente clientWithOrders = mock(Cliente.class);
+        OS ordersOfService = new OS();
+        when(clienteRepository.findById(anyInt())).thenReturn(Optional.of(clientWithOrders));
+        when(clientWithOrders.getList()).thenReturn(Arrays.asList(ordersOfService));
+
+        DataIntegratyViolationException exception = assertThrows(
+                DataIntegratyViolationException.class, () -> clienteService.delete(ID),
+                "Esperava-se que delete() lançasse DataIntegratyViolationException, mas isso não aconteceu"
+        );
+
+        assertTrue(exception.getMessage().contains("Pessoa possui Ordens de Serviço, não pode ser deletado!"));
     }
 }
