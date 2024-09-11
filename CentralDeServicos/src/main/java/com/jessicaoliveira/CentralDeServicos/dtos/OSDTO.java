@@ -33,7 +33,7 @@ public class OSDTO implements Serializable {
     @NotNull(message = "O campo CLIENTE é requerido")
     private Integer cliente;
 
-    public OSDTO(){
+    public OSDTO(Integer id, String observacoes, Integer cod, Integer statusCod, Integer tecnicoId, Integer clienteId){
         super();
     }
 
