@@ -7,6 +7,7 @@ import com.jessicaoliveira.CentralDeServicos.domain.enums.Prioridade;
 import com.jessicaoliveira.CentralDeServicos.domain.enums.Status;
 import com.jessicaoliveira.CentralDeServicos.dtos.OSDTO;
 import com.jessicaoliveira.CentralDeServicos.repositories.OSRepository;
+import com.jessicaoliveira.CentralDeServicos.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -66,7 +67,15 @@ class OsServiceTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindByIdThenThrowObjectNotFoundException() {
+        when(osRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        ObjectNotFoundException thrown = assertThrows(ObjectNotFoundException.class, () -> {
+            osService.findById(ID);
+        });
+
+        assertEquals("Objeto não encontrado! Id: " + ID + ", Tipo: " + OS.class.getName(), thrown.getMessage());
+        verify(osRepository, times(1)).findById(ID);
     }
 
     @Test
