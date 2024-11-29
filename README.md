@@ -1,6 +1,27 @@
-# API Central De Servicos
+# API - Central De Servicos
 
-Este README fornece informações sobre a API CentralDeServicos, que gerencia recursos relacionados a técnicos, clientes e ordens de serviço.
+A aplicação foi desenvolvida para gerenciamento de serviços relacionados a técnicos, clientes e ordens de serviço, com atenção especial à integridade dos dados e às regras de negócio.
+
+Sem serviço de clientes , é possível:
+
+Cadastre novos clientes, desde que o CPF fornecido não esteja duplicado no sistema.
+Atualizar informações como nome, CPF e telefone, com verificação de unicidade do CPF.
+Listar todos os clientes ou buscar um cliente específico pelo seu ID.
+Excluir clientes, desde que não possuam ordens de serviço vinculadas. Caso contrário, o sistema impede a exclusão para preservação do histórico e a rastreabilidade dos dados.
+Já não há serviço de pedidos de serviço , é possível:
+
+Criar e atualizar pedidos de serviço com informações como prioridade, status e observações.
+Atribuir uma ordem de serviço a um técnico e a um cliente, garantindo que ambas as entidades existam no sistema.
+Fechar automaticamente a ordem de serviço, atribuindo uma data de fechamento, caso o status seja atualizado para "finalizado".
+Listar todos os pedidos ou buscar uma específica pelo ID, garantindo total controle sobre o histórico de serviços.
+No serviço de técnicos , as funcionalidades seguem uma lógica semelhante aos clientes:
+
+Cadastro de técnicos, garantindo que o CPF seja único.
+Atualização de informações básicas, como nome e telefone, respeitando a regra de unicidade do CPF.
+Exclusão de técnicos, mas apenas não há ordens de serviços associados. Isso protege o sistema contra perda de informações relevantes.
+Além disso, o sistema está preparado para lidar com erros comuns, como a tentativa de excluir uma entidade com vínculos ativos ou a duplicidade de CPFs. Mensagens claras e específicas são retornadas ao usuário nesses casos, facilitando a compreensão do que precisa ser ajustado.
+
+Essa estrutura garante que os processos sejam realizados de forma fluida e segura, evitando inconsistências e possibilitando um controle eficiente do histórico de clientes, técnicos e ordens de serviço.
 
 ## Tecnologias Utilizadas
 
