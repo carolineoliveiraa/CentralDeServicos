@@ -79,10 +79,56 @@ class OsServiceTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnSuccess() {
+        when(tecnicoService.findById(anyInt())).thenReturn(tecnico);
+        when(clienteService.findById(anyInt())).thenReturn(cliente);
+        when(osRepository.save(any(OS.class))).thenReturn(os);
+
+        OS createdOs = osService.create(osdto);
+
+        assertNotNull(createdOs);
+        assertEquals(OS.class, createdOs.getClass());
+        assertEquals(ID, createdOs.getId());
+        assertEquals(OBSERVACOES, createdOs.getObservacoes());
+        verify(osRepository, times(1)).save(any(OS.class));
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSuccess() {
+        // Configure os mocks
+        when(osRepository.findById(eq(ID))).thenReturn(Optional.of(os));
+        when(tecnicoService.findById(eq(tecnico.getId()))).thenReturn(tecnico);
+        when(clienteService.findById(eq(cliente.getId()))).thenReturn(cliente);
+        when(osRepository.save(any(OS.class))).thenReturn(os);
+
+        // Execute o método
+        OS updatedOs = osService.update(osdto);
+
+        // Verificações
+        assertNotNull(updatedOs);
+        assertEquals(OS.class, updatedOs.getClass());
+        assertEquals(ID, updatedOs.getId());
+        assertEquals(OBSERVACOES, updatedOs.getObservacoes());
+
+        // Verifique interações
+        verify(osRepository, times(1)).findById(eq(ID));
+        verify(tecnicoService, times(1)).findById(eq(tecnico.getId()));
+        verify(clienteService, times(1)).findById(eq(cliente.getId()));
+        verify(osRepository, times(1)).save(any(OS.class));
+    }
+
+
+    @Test
+    void whenStatusIsConcludedThenSetDataFechamento() {
+        osdto.setStatus(Status.ENCERRADO.getCod());
+
+        when(tecnicoService.findById(anyInt())).thenReturn(tecnico);
+        when(clienteService.findById(anyInt())).thenReturn(cliente);
+        when(osRepository.save(any(OS.class))).thenReturn(os);
+
+        OS createdOs = osService.create(osdto);
+
+        assertNotNull(createdOs.getDataFechamento());
+        verify(osRepository, times(1)).save(any(OS.class));
     }
 }
